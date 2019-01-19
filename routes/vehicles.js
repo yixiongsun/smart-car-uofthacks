@@ -35,6 +35,12 @@ router.get('/location', function (req, res) {
     if (!token || !vehicleId) {
         return res.send(400, "Invalid arguments")
     }
+    try {
+        const vehicle = new smartcar.Vehicle(vehicleId, token);
+        res.send(vehicle.location())
+    } catch (error) {
+        res.send(200)
+    }
 })
 
 router.get('/disconnect', function (req, res) {
@@ -45,10 +51,43 @@ router.get('/disconnect', function (req, res) {
     }
     try {
         const vehicle = new smartcar.Vehicle(vehicleId, token);
-        vechile.disconnect()
+        vehicle.disconnect()
     } catch (error) {
         console.log(error)
-        res.send(200)
+        res.send(400)
     }
 })
+
+router.get('/unlock', function (req, res) {
+    var token = req.query.token
+    var vehicleId = req.query.vehicleId
+    if (!token || !vehicleId) {
+        return res.send(400, "Invalid arguments")
+    }
+    try {
+        const vehicle = new smartcar.Vehicle(vehicleId, token);
+        vehicle.unlock()
+        res.send(200)
+    } catch (error) {
+        console.log(error)
+        res.send(400)
+    }
+})
+
+router.get('/lock', function (req, res) {
+    var token = req.query.token
+    var vehicleId = req.query.vehicleId
+    if (!token || !vehicleId) {
+        return res.send(400, "Invalid arguments")
+    }
+    try {
+        const vehicle = new smartcar.Vehicle(vehicleId, token);
+        vehicle.lock()
+        res.send(200)
+    } catch (error) {
+        console.log(error)
+        res.send(400)
+    }
+})
+
 module.exports = router
