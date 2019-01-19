@@ -19,6 +19,8 @@ import java.util.HashMap;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    VehicleManager vehicleManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +47,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        VehicleManager vehicleManager = new VehicleManager();
+        vehicleManager = new VehicleManager();
         // Array list of maps that contain data about the vehicle
         ArrayList<HashMap<String, String>> vehicles = vehicleManager.getVehicles();
 
@@ -106,19 +108,18 @@ public class MainActivity extends AppCompatActivity
 
         // id is
         int id = item.getItemId();
-
+        vehicleManager.setCurrentVehicle(id);
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
 
-
-
-
-
-
-
-
         return true;
     }
+
+    // loads UI for the vehicle
+    private void loadVehicle() {
+
+    }
+
 }

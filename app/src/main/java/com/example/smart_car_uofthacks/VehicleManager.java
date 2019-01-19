@@ -5,7 +5,9 @@ import java.util.HashMap;
 
 public class VehicleManager {
 
+    // improvements -> create a vehicle class
     private ArrayList<HashMap<String, String>> vehicles;
+    private HashMap<String, String> current;
 
     // Constructor for the Vehicle manager class
     // Initializes vehicles array and loads the data from storage
@@ -61,6 +63,15 @@ public class VehicleManager {
     }
 
     //
+    public void setCurrentVehicle(int index) {
+        current = vehicles.get(index);
+    }
+
+    public HashMap<String, String> getCurrentVehicle() {
+        return current;
+    }
+
+
     public void aboutVehicle(int index) {}
 
     public void locationVehicle(int index) {}
