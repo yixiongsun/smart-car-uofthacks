@@ -28,10 +28,14 @@ router.get('/exchange', function (req, res) {
     // TODO: Authorization Step 3: Handle Smartcar response
     const code = req.query.code;
 
-    console.log(code);
+    // TODO: Request Step 1: Obtain an access token
+    return client.exchangeCode(code)
+        .then(function(_access) {    
+        // in a production app you'll want to store this in some kind of persistent storage
+        access = _access;
 
-    //if (code == )
-    res.sendStatus(200);
+        res.sendStatus(200);
+    })
   })
 
 module.exports = router
