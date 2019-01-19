@@ -52,4 +52,24 @@ public class Requester{
 
     }
 
+    static void continuedRequest(final String url) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                // send request to exchange the auth code for the access token
+                Request exchangeRequest = new Request.Builder()
+
+                        .url(url)
+                        .build();
+
+                try {
+                    client.newCall(exchangeRequest).execute();
+
+                } catch (IOException e) {
+                }
+            }
+        }).start();
+    }
+
 }

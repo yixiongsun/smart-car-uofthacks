@@ -1,5 +1,7 @@
 package com.example.smart_car_uofthacks;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -27,7 +29,13 @@ public class VehicleManager {
     // If vehicle already exists, simply update the existing one
     public boolean addVehicle() {
         // Request auth
-
+        Requester.setListener(new Listener() {
+            @Override
+            public void onEvent(String out) {
+                Log.d("output", out);
+            }
+        });
+        Requester.urlInfo(ParseInput.makeUrl("/auth", new HashMap<String, String>()));
 
 
         String access = "";

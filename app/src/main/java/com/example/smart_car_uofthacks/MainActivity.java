@@ -50,7 +50,10 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+
+
         vehicleManager = new VehicleManager();
+        vehicleManager.addVehicle();
         // Array list of maps that contain data about the vehicle
         ArrayList<Vehicle> vehicles = vehicleManager.getVehicles();
 
