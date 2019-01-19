@@ -1,5 +1,6 @@
 package com.example.smart_car_uofthacks;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -13,11 +14,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    VehicleManager vehicleManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +50,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        VehicleManager vehicleManager = new VehicleManager();
+        vehicleManager = new VehicleManager();
         // Array list of maps that contain data about the vehicle
         ArrayList<HashMap<String, String>> vehicles = vehicleManager.getVehicles();
 
@@ -62,7 +67,7 @@ public class MainActivity extends AppCompatActivity
             menu.add(0, i, 0, vehicles.get(i).get("name"));
         }
 
-
+        openMaps();
 
 
     }
@@ -106,19 +111,21 @@ public class MainActivity extends AppCompatActivity
 
         // id is
         int id = item.getItemId();
-
+        vehicleManager.setCurrentVehicle(id);
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
 
-
-
-
-
-
-
-
         return true;
     }
+
+    public void openMaps() {
+        Intent intent = new Intent(getBaseContext(), MapsActivity.class);
+        intent.putExtra("coords", new LatLng(101.1, 1.2));
+        startActivity(intent);
+    }
+
+
+
 }
