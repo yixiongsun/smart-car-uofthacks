@@ -1,11 +1,25 @@
 {
-    "name": "app-service-hello-world",
-    "description": "Simple Hello World Node.js sample for Azure App Service",
-    "version": "0.0.1",
-    "private": true,
-    "license": "MIT",
-    "author": "Microsoft",
-    "scripts": {
-        "start": "node index.js"
-    }
+  "name": "smart-car-uofthacks",
+  "description": "Simple Hello World Node.js sample for Azure App Service",
+  "version": "0.0.1",
+  "private": true,
+  "license": "MIT",
+  "author": "Microsoft",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "^4.16.4",
+    "smartcar": "^4.2.1"
+  },
+  "main": "app.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yixiongsun/smart-car-uofthacks.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yixiongsun/smart-car-uofthacks/issues"
+  },
+  "homepage": "https://github.com/yixiongsun/smart-car-uofthacks#readme"
 }
