@@ -25,13 +25,15 @@
             android:id="@+id/tv_vehicle_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="30dp"
             android:text="2019 Tesla Model S"
-            android:textSize="30sp"
+            android:textSize="35sp"
             android:textStyle="bold"
             android:padding="5dp"
-            android:textAlignment="center"
-            android:background="@drawable/rounded_corners"/>
+            android:textAlignment="center"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -65,8 +67,9 @@
                 android:layout_weight="0.25"
                 android:adjustViewBounds="true"
                 android:background="@drawable/rounded_corners"
+                android:foreground="?attr/selectableItemBackground"
                 android:scaleType="fitCenter"
-                android:src="@drawable/refresh"
+                android:src="@drawable/refresh_vector"
                 android:contentDescription="@string/unlock"/>
         </LinearLayout>
 
@@ -82,34 +85,54 @@
             <ImageButton
                 android:id="@+id/unlock_button"
                 android:layout_width="0dp"
-                android:layout_height="100dp"
-                android:layout_margin="10dp"
+                android:layout_height="75dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="20dp"
                 android:padding="10dp"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
                 android:background="@drawable/rounded_corners"
-                android:onClick="unlockVehicle"
+                android:foreground="?attr/selectableItemBackground"
                 android:scaleType="fitCenter"
-                android:src="@drawable/lock_open"
+                android:src="@drawable/open_lock_vector"
                 android:tint="@color/colorPrimary"
-                android:contentDescription="@string/unlock"/>
+                android:contentDescription="@string/unlock"
+                android:onClick="unlockVehicle"/>
 
             <ImageButton
                 android:id="@+id/lock_button"
                 android:layout_width="0dp"
-                android:layout_height="100dp"
+                android:layout_height="75dp"
                 android:scaleType="fitCenter"
-                android:src="@drawable/lock_closed"
-                android:tint="@color/colorAccent"
+                android:src="@drawable/lock_closed_vector"
                 android:layout_weight="1"
-                android:layout_margin="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="20dp"
                 android:padding="10dp"
                 android:background="@drawable/rounded_corners"
+                android:foreground="?attr/selectableItemBackground"
                 android:adjustViewBounds="true"
                 android:onClick="lockVehicle"
                 android:contentDescription="@string/lock"/>
         </LinearLayout>
 
+        <ImageButton
+            android:id="@+id/location_button"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:scaleType="fitCenter"
+            android:layout_above="@+id/lock_unlock_linear_layout"
+            android:src="@drawable/location_symbol_vector"
+            android:layout_margin="10dp"
+            android:padding="10dp"
+            android:background="@drawable/rounded_corners"
+            android:foreground="?attr/selectableItemBackground"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/lock"/>
 
     </RelativeLayout>
 
