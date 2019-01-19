@@ -21,28 +21,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/lock_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="10dp"
-            android:text="@string/lock"
-            android:textSize="22sp" />
-
-        <Button
-            android:id="@+id/unlock_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/lock_button"
-            android:text="@string/unlock"
-            android:layout_margin="10dp"
-            android:textSize="22sp"/>
-
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -50,10 +28,41 @@
             android:text="@string/odometer"
             android:textSize="22sp"
             android:textAlignment="center"
-            android:layout_below="@+id/unlock_button"
+            android:layout_below="@+id/lock_unlock_linear_layout"
             android:layout_margin="10dp"/>
 
-    </RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="2"
+            android:id="@+id/lock_unlock_linear_layout">
 
+            <ImageButton
+                android:id="@+id/unlock_button"
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/lock_open"
+                android:tint="@color/colorPrimary"
+                android:layout_weight="1"
+                android:layout_margin="5dp"
+                android:adjustViewBounds="true"
+                android:onClick="unlockVehicle"/>
+
+            <ImageButton
+                android:id="@+id/lock_button"
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/lock_closed"
+                android:tint="@color/colorAccent"
+                android:layout_weight="1"
+                android:layout_margin="5dp"
+                android:adjustViewBounds="true"
+                android:onClick="lockVehicle"/>
+        </LinearLayout>
+
+
+    </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>
