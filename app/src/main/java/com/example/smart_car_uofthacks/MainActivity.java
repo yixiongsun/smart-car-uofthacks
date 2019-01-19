@@ -52,22 +52,21 @@ public class MainActivity extends AppCompatActivity
 
         vehicleManager = new VehicleManager();
         // Array list of maps that contain data about the vehicle
-        ArrayList<HashMap<String, String>> vehicles = vehicleManager.getVehicles();
+        ArrayList<Vehicle> vehicles = vehicleManager.getVehicles();
 
 
         // Demo ids
-        vehicles = new ArrayList<HashMap<String, String>>();
-        HashMap<String, String> a = new HashMap<String, String>();
-        a.put("name", "Test");
+        vehicles = new ArrayList<Vehicle>();
+        Vehicle a = new Vehicle("1", "asd", "qwe");
         vehicles.add(a);
 
         // Get reference to menu and add objects from the list in the order of the list
         Menu menu = navigationView.getMenu();
         for (int i = 0; i < vehicles.size(); i++) {
-            menu.add(0, i, 0, vehicles.get(i).get("name"));
+            menu.add(0, i, 0, vehicles.get(i).getId());
         }
 
-        openMaps();
+        //openMaps();
 
 
     }
@@ -126,6 +125,10 @@ public class MainActivity extends AppCompatActivity
         startActivity(intent);
     }
 
+    public void lockVehicle() {
+        //vehicleManager.lockVehicle();
+    }
 
+    public void unlockVehicle() {}
 
 }

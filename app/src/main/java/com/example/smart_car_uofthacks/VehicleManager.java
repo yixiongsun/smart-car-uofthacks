@@ -6,8 +6,8 @@ import java.util.HashMap;
 public class VehicleManager {
 
     // improvements -> create a vehicle class
-    private ArrayList<HashMap<String, String>> vehicles;
-    private HashMap<String, String> current;
+    private ArrayList<Vehicle> vehicles;
+    private Vehicle current;
 
     // Constructor for the Vehicle manager class
     // Initializes vehicles array and loads the data from storage
@@ -16,7 +16,7 @@ public class VehicleManager {
     }
 
     // Getter for vehicles -> eventually be improved to make a copy/clone
-    public ArrayList<HashMap<String, String>> getVehicles() {
+    public ArrayList<Vehicle> getVehicles() {
         return vehicles;
     }
 
@@ -29,8 +29,11 @@ public class VehicleManager {
         // Request auth
 
 
+
         String access = "";
         String refresh = "";
+        String route = "/vehicle/vehicles";
+
 
         // Request vehicles
 
@@ -39,21 +42,17 @@ public class VehicleManager {
         ArrayList<String> vehicleIds = new ArrayList<String>();
         for (String id: vehicleIds) {
             boolean found = false;
-            for (HashMap vehicle: vehicles ) {
+            for (Vehicle vehicle: vehicles ) {
                 // if vehicle already exists, update the values
-                if (vehicle.get("vehicle_id").equals(id)) {
-                    vehicle.put("access_token", access);
-                    vehicle.put("refresh_token", refresh);
+                if (vehicle.getId().equals(id)) {
+                    vehicle.setAccess_token(access);
+                    vehicle.setRefresh_token(refresh);
                     found = true;
                     break;
                 }
             }
             if (!found) {
-                HashMap<String, String> v = new HashMap<String, String>();
-                v.put("vehicle_id", id);
-                v.put("access_token", access);
-                v.put("refresh_token", refresh);
-                vehicles.add(v);
+                vehicles.add(new Vehicle(id, access, refresh));
             }
 
         }
@@ -62,23 +61,36 @@ public class VehicleManager {
         return true;
     }
 
+    private void openAuthLink() {}
+
+
+
     //
     public void setCurrentVehicle(int index) {
         current = vehicles.get(index);
     }
 
-    public HashMap<String, String> getCurrentVehicle() {
+    public Vehicle getCurrentVehicle() {
         return current;
     }
 
 
-    public void aboutVehicle(int index) {}
+    public void aboutVehicle() {
+        String id = current.getId();
+        String access_token = current.getAccess_token();
 
-    public void locationVehicle(int index) {}
+        // request with this token
 
-    public void disconnectVehicle(int index) {}
 
-    public void unlockVehicle(int index) {}
 
-    public void lockVehicle(int index) {}
+
+    }
+
+    public void locationVehicle() {}
+
+    public void disconnectVehicle() {}
+
+    public void unlockVehicle() {}
+
+    public void lockVehicle() {}
 }
