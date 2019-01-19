@@ -7,13 +7,17 @@ import android.util.Log;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class VehicleManager {
+
+import android.content.Context;
+
+public class VehicleManager implements Serializable {
 
     // improvements -> create a vehicle class
-    private ArrayList<Vehicle> vehicles;
+    ArrayList<Vehicle> vehicles;
     private Vehicle current;
     Context context;
 
@@ -21,6 +25,7 @@ public class VehicleManager {
     // Initializes vehicles array and loads the data from storage
     public VehicleManager(Context context) {
         this.context = context;
+        vehicles = new ArrayList<Vehicle>();
     }
 
     // Getter for vehicles -> eventually be improved to make a copy/clone
@@ -123,6 +128,10 @@ public class VehicleManager {
         current = vehicles.get(index);
     }
 
+    public void setCurrentVehicle(Vehicle vehicle) {
+        current = vehicle;
+    }
+
     public Vehicle getCurrentVehicle() {
         return current;
     }
@@ -146,4 +155,19 @@ public class VehicleManager {
     public void unlockVehicle() {}
 
     public void lockVehicle() {}
+
+    public void saveAll(){
+        SavingData.saveToFile(SavingData.CURRENT_VEHICLE, this.context, current);
+        SavingData.saveToFile(SavingData.VEHICLE_LIST, this.context, vehicles);
+    }
+
+    public void loadAll(){
+        vehicles = SavingData.loadFromFile(SavingData.VEHICLE_LIST, this.context);
+        current = SavingData.loadFromFile(SavingData.CURRENT_VEHICLE, this.context);
+    }
+
+    public String toString(Vehicle vehicle){
+        return vehicle.getId();
+    }
+
 }

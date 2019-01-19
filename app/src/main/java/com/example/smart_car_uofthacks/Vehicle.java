@@ -1,6 +1,8 @@
 package com.example.smart_car_uofthacks;
 
-public class Vehicle {
+import java.io.Serializable;
+
+public class Vehicle implements Serializable {
     private String id;
     private String VIN;
     private String name;
