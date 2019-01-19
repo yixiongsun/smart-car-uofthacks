@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity
             menu.add(0, i, 0, vehicles.get(i).get("name"));
         }
 
-        openMaps();
+        //openMaps();
 
 
     }
@@ -126,6 +126,10 @@ public class MainActivity extends AppCompatActivity
         startActivity(intent);
     }
 
+    public void lockVehicle() {
+        vehicleManager.lockVehicle(currentVehicle);
+    }
 
+    public void unlockVehicle() {}
 
 }
