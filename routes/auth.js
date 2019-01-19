@@ -32,7 +32,8 @@ router.get('/exchange', function (req, res) {
         // in a production app you'll want to store this in some kind of persistent storage
         access = _access;
         
-        res.sendStatus(200, access);
+        res.send(access);
+        
     })
 })
 
@@ -44,7 +45,7 @@ router.get('/refresh', function(req, res) {
             // in a production app you'll want to store this in some kind of persistent storage
             access = _access;
 
-            res.sendStatus(200, access);
+            res.send(access);
         })
 })
 

@@ -12,7 +12,7 @@ interface Listener {
 }
 
 public class Requester{
-   // public String urlly = "http://smart-car-uofthacks.azurewebsites.net";
+   // //"http://smart-car-uofthacks.azurewebsites.net";
     static OkHttpClient client = new OkHttpClient();
     static Response response;
     static String answer;
@@ -28,11 +28,12 @@ public class Requester{
    }
 
    static void doSomething(final String url){
+       final String nUrl = url.replace("localhost:3000", "10.0.2.2:3000" );
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    answer = running(url);
+                    answer = running(nUrl);
                     //ReturnAnswer(answer);
                     if (event != null) {
                         event.onEvent(answer);

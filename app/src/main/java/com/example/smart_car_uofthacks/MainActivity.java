@@ -54,6 +54,13 @@ public class MainActivity extends AppCompatActivity
 
         vehicleManager = new VehicleManager(this);
         vehicleManager.addVehicle();
+        /*
+        vehicleManager.setListener(new Listener() {
+            @Override
+            public void onEvent(String out) {
+                openWebView(out);
+            }
+        });*/
         // Array list of maps that contain data about the vehicle
         ArrayList<Vehicle> vehicles = vehicleManager.getVehicles();
 
@@ -73,6 +80,14 @@ public class MainActivity extends AppCompatActivity
 
 
     }
+
+    /*
+    private void openWebView(String out) {
+        Intent intent = new Intent(this, WebViewActivity.class);
+        intent.putExtra("exchange", out);
+        startActivityForResult(intent,1);
+    }*/
+
 
     @Override
     public void onBackPressed() {
@@ -134,7 +149,7 @@ public class MainActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && resultCode == RESULT_OK) {
-            String url = data.getStringExtra("url");
+            String url = data.getStringExtra("exchange");
             if (url != null) {
                 vehicleManager.exchangeAuth(url);
             }

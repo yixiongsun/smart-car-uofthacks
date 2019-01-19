@@ -5,7 +5,8 @@ import java.util.HashMap;
 
 public class ParseInput {
 
-    public static final String URL= "http://smart-car-uofthacks.azurewebsites.net";
+    public static final String URL= "http://10.0.2.2:3000";
+            //"http://smart-car-uofthacks.azurewebsites.net";
     //url is http://smart-car-uofthacks.azurewebsites.net
     //ending is /login
     //map key is key1, map value is 1

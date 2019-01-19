@@ -21,14 +21,24 @@ public class VehicleManager implements Serializable {
     private Vehicle current;
     Context context;
     IntentManager intentManager;
+    Listener listener;
 
     // Constructor for the Vehicle manager class
     // Initializes vehicles array and loads the data from storage
     public VehicleManager(Context context) {
         this.context = context;
-        vehicles = new ArrayList<Vehicle>();
+
         loadAll();
+        if (vehicles == null) {
+            vehicles = new ArrayList<Vehicle>();
+
+        }
+
         intentManager = new IntentManager(context);
+    }
+
+    public void setListener(Listener listener) {
+        this.listener = listener;
     }
 
     // Getter for vehicles -> eventually be improved to make a copy/clone
@@ -53,6 +63,10 @@ public class VehicleManager implements Serializable {
         Requester.setListener(new Listener() {
             @Override
             public void onEvent(String out) {
+                /*
+                if (listener != null) {
+                    listener.onEvent(out);
+                }*/
                 intentManager.openWebView(out);
             }
         });
@@ -78,8 +92,8 @@ public class VehicleManager implements Serializable {
 
     private void addVehicle(JSONObject jsonObject) {
         try {
-            final String access = jsonObject.getString("access_token");
-            final String refresh = jsonObject.getString("refresh_token");
+            final String access = jsonObject.getString("accessToken");
+            final String refresh = jsonObject.getString("refreshToken");
             String route = "/vehicle/vehicles";
             Requester.setListener(new Listener() {
                 @Override
@@ -90,7 +104,7 @@ public class VehicleManager implements Serializable {
             });
             HashMap<String, String> parameters = new HashMap<String, String>();
             parameters.put("token", access);
-            Requester.urlInfo(ParseInput.makeUrl(route, new HashMap<String, String>()));
+            Requester.urlInfo(ParseInput.makeUrl(route, parameters));
         } catch (Exception  e){
             Log.d("Error", e.toString());
         }
@@ -101,8 +115,7 @@ public class VehicleManager implements Serializable {
     private void saveNewVehicles(String vehicles, String access, String refresh) {
         // we get stuffs
         try {
-            JSONObject jsonObject = new JSONObject(vehicles);
-            JSONArray vehicleIds = jsonObject.getJSONArray("vehicles");
+            JSONArray vehicleIds = new JSONArray(vehicles);
             for (int i = 0; i < vehicleIds.length(); i++) {
                 String id = vehicleIds.getString(i);
                 boolean found = false;
@@ -144,7 +157,7 @@ public class VehicleManager implements Serializable {
     }
 
 
-    public void aboutVehicle() {
+    public void locationVehicle() {
         String id = current.getId();
         String access = current.getAccess_token();
         String route = "/vehicle/info";
@@ -158,7 +171,7 @@ public class VehicleManager implements Serializable {
         parameters.put("token", access);
         parameters.put("vehicleId", id);
 
-        Requester.urlInfo(ParseInput.makeUrl(route, new HashMap<String, String>()));
+        Requester.urlInfo(ParseInput.makeUrl(route, parameters));
 
         // request with this token
 
@@ -181,7 +194,7 @@ public class VehicleManager implements Serializable {
     }
 
 
-    public void locationVehicle() {}
+    public void aboutVehicle() {}
 
     public void disconnectVehicle() {}
 

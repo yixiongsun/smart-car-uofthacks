@@ -10,7 +10,7 @@ router.get('/vehicles', function (req, res) {
     return smartcar.getVehicleIds(token)
         .then(function (data) {
             // the list of vehicle ids
-            res.send(200, data.vehicles)
+            res.send(data.vehicles)
         })
 })
 
@@ -22,7 +22,7 @@ router.get('/info', function (req, res) {
     }
     try {
         const vehicle = new smartcar.Vehicle(vehicleId, token);
-        res.send(200, vehicle.info())
+        res.send(vehicle.info())
     } catch (error) {
         console.log(error)
         res.send(200)

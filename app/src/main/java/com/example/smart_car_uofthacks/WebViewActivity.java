@@ -18,9 +18,11 @@ public class WebViewActivity extends AppCompatActivity {
         webView = (WebView) findViewById(R.id.webview_id);
         webView.getSettings().setJavaScriptEnabled(true);
         //webView.loadUrl("http://www.google.com");
+        String test = getIntent().getStringExtra("url");
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            webView.loadUrl(extras.getString("url"));
+            String firstUrl = extras.getString("url");
+            webView.loadUrl(firstUrl);
             //The key argument here must match that used in the other activity
         }
         final boolean firstRedirect = true;
