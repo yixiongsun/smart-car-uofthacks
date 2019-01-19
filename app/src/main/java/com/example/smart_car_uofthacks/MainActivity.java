@@ -13,6 +13,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -23,6 +26,7 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        /*
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -30,7 +34,7 @@ public class MainActivity extends AppCompatActivity
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
-        });
+        });*/
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -40,6 +44,27 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        VehicleManager vehicleManager = new VehicleManager();
+        // Array list of maps that contain data about the vehicle
+        ArrayList<HashMap<String, String>> vehicles = vehicleManager.getVehicles();
+
+
+        // Demo ids
+        vehicles = new ArrayList<HashMap<String, String>>();
+        HashMap<String, String> a = new HashMap<String, String>();
+        a.put("name", "Test");
+        vehicles.add(a);
+
+        // Get reference to menu and add objects from the list in the order of the list
+        Menu menu = navigationView.getMenu();
+        for (int i = 0; i < vehicles.size(); i++) {
+            menu.add(0, i, 0, vehicles.get(i).get("name"));
+        }
+
+
+
+
     }
 
     @Override
@@ -78,24 +103,22 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
+
+        // id is
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
 
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+
+
+
+
+
+
+
+
         return true;
     }
 }
