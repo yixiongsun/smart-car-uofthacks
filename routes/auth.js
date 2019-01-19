@@ -15,7 +15,7 @@ router.get('/', function (req, res) {
     // TODO: Authorization Step 1b: Launch Smartcar authentication dialog
     try {
         const link = client.getAuthUrl();
-        res.send(200, link)
+        res.send(link)
     } catch (error) {
         if (error) {
             res.send(500)

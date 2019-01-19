@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity
 
 
 
-        vehicleManager = new VehicleManager();
+        vehicleManager = new VehicleManager(this);
         vehicleManager.addVehicle();
         // Array list of maps that contain data about the vehicle
         ArrayList<Vehicle> vehicles = vehicleManager.getVehicles();
@@ -133,5 +133,17 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void unlockVehicle() {}
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            String url = data.getStringExtra("url");
+            if (url != null) {
+                vehicleManager.exchangeAuth(url);
+            }
+
+        }
+    }
+
 
 }

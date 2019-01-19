@@ -39,6 +39,7 @@ public class Requester{
                     }
                 }
                 catch (Exception e){
+                    Log.e("error", e.toString());
                     answer = null;
                 }
             }
@@ -50,26 +51,6 @@ public class Requester{
             response = client.newCall(request).execute();
             return response.body().string();
 
-    }
-
-    static void continuedRequest(final String url) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-                // send request to exchange the auth code for the access token
-                Request exchangeRequest = new Request.Builder()
-
-                        .url(url)
-                        .build();
-
-                try {
-                    client.newCall(exchangeRequest).execute();
-
-                } catch (IOException e) {
-                }
-            }
-        }).start();
     }
 
 }
