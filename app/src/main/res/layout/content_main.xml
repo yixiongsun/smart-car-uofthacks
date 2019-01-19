@@ -22,32 +22,77 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/tv_odometer"
+            android:id="@+id/tv_vehicle_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/lock_unlock_linear_layout"
             android:layout_margin="10dp"
-            android:text="@string/odometer"
-            android:textAlignment="center"/>
+            android:text="2019 Tesla Model S"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:padding="5dp"
+            android:textAlignment="center"
+            android:background="@drawable/rounded_corners"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="2"
+            android:id="@+id/odometer_linear_layout"
+            android:layout_below="@+id/tv_vehicle_info">
+
+
+            <TextView
+                android:id="@+id/tv_odometer"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.75"
+                android:layout_margin="10dp"
+                android:text="@string/odometer"
+                android:textSize="30sp"
+                android:padding="5dp"
+                android:textAlignment="center"
+                android:background="@drawable/rounded_corners"/>
+
+            <ImageButton
+                android:id="@+id/odometer_refresh_button"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginEnd="10dp"
+                android:padding="5dp"
+                android:layout_weight="0.25"
+                android:adjustViewBounds="true"
+                android:background="@drawable/rounded_corners"
+                android:scaleType="fitCenter"
+                android:src="@drawable/refresh"
+                android:contentDescription="@string/unlock"/>
+        </LinearLayout>
+
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:weightSum="2"
-            android:id="@+id/lock_unlock_linear_layout">
+            android:id="@+id/lock_unlock_linear_layout"
+            android:layout_alignParentBottom="true">
 
             <ImageButton
                 android:id="@+id/unlock_button"
                 android:layout_width="0dp"
                 android:layout_height="100dp"
+                android:layout_margin="10dp"
+                android:padding="10dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:background="@drawable/rounded_corners"
+                android:onClick="unlockVehicle"
                 android:scaleType="fitCenter"
                 android:src="@drawable/lock_open"
                 android:tint="@color/colorPrimary"
-                android:layout_weight="1"
-                android:layout_margin="5dp"
-                android:adjustViewBounds="true"
-                android:onClick="unlockVehicle"/>
+                android:contentDescription="@string/unlock"/>
 
             <ImageButton
                 android:id="@+id/lock_button"
@@ -57,9 +102,12 @@
                 android:src="@drawable/lock_closed"
                 android:tint="@color/colorAccent"
                 android:layout_weight="1"
-                android:layout_margin="5dp"
+                android:layout_margin="10dp"
+                android:padding="10dp"
+                android:background="@drawable/rounded_corners"
                 android:adjustViewBounds="true"
-                android:onClick="lockVehicle"/>
+                android:onClick="lockVehicle"
+                android:contentDescription="@string/lock"/>
         </LinearLayout>
 
 
