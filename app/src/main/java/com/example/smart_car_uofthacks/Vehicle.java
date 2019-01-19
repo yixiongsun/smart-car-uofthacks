@@ -10,6 +10,8 @@ public class Vehicle implements Serializable {
     private String model;
     private int year;
     private double odometer;
+    private double latitude;
+    private double longitide;
     private String access_token;
     private String refresh_token;
 
@@ -39,6 +41,10 @@ public class Vehicle implements Serializable {
     public String getRefresh_token() {
         return this.refresh_token;
     }
+
+    public void setLatitude(double l) { latitude = l;}
+    public void setLongitide(double l) { longitide = l;}
+
 
 
 

@@ -122,11 +122,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    public void openMaps() {
-        Intent intent = new Intent(getBaseContext(), MapsActivity.class);
-        intent.putExtra("coords", new LatLng(101.1, 1.2));
-        startActivity(intent);
-    }
+
 
     public void lockVehicle() {
         //vehicleManager.lockVehicle();
@@ -134,7 +130,8 @@ public class MainActivity extends AppCompatActivity
 
     public void unlockVehicle() {}
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && resultCode == RESULT_OK) {
             String url = data.getStringExtra("url");
