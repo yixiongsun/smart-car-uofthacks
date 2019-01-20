@@ -13,8 +13,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,6 +31,10 @@ public class MainActivity extends AppCompatActivity
 
     VehicleManager vehicleManager;
     NavigationView navigationView;
+    MapView mapView;
+    GoogleMap mMap;
+    LatLng latLng;
+    TextView odometerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +55,8 @@ public class MainActivity extends AppCompatActivity
 
 
 
+        odometerView = (TextView) findViewById(R.id.tv_odometer);
+
         vehicleManager = new VehicleManager(this);
         vehicleManager.setListener(new Listener() {
             @Override
@@ -51,6 +64,7 @@ public class MainActivity extends AppCompatActivity
                 menuSetup();
                 refreshOdometer();
                 vehicleLoad();
+                refreshMaps();
             }
         });
 
@@ -60,29 +74,106 @@ public class MainActivity extends AppCompatActivity
             menuSetup();
             vehicleLoad();
             refreshOdometer();
+            refreshMaps();
         }
 
+        SupportMapFragment supportMapFragment = ((SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map));
+        supportMapFragment.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                setUpMap(googleMap);
+            }
+        });
+
+    }
+
+    private void setUpMap(GoogleMap googleMap) {
+        if (googleMap == null) {
+            return;
+        }
+        mMap = googleMap;
+
+        // Add a marker in Sydney and move the camera
+        if (latLng != null) {
+            this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mMap.addMarker(new MarkerOptions().position(latLng).title(vehicleManager.getCurrentVehicle().getName()));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                    mMap.animateCamera( CameraUpdateFactory.zoomTo( 12.0f ) );                }
+            });
+
+
+        }
 
     }
 
     private void menuSetup() {
-        // Array list of maps that contain data about the vehicle
-        ArrayList<Vehicle> vehicles = vehicleManager.getVehicles();
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // Array list of maps that contain data about the vehicle
+                ArrayList<Vehicle> vehicles = vehicleManager.getVehicles();
 
-        // Get reference to menu and add objects from the list in the order of the list
-        Menu menu = navigationView.getMenu();
-        for (int i = 0; i < vehicles.size(); i++) {
-            menu.add(0, i, 0, vehicles.get(i).getName());
-        }
-        if (!vehicles.isEmpty()) {
-            menu.getItem(vehicleManager.getCurrentVehicleIndex()).setChecked(true);
-        }
+                // Get reference to menu and add objects from the list in the order of the list
+                Menu menu = navigationView.getMenu();
+                menu.clear();
+                for (int i = 0; i < vehicles.size(); i++) {
+                    menu.add(0, i, 0, vehicles.get(i).getName());
+                }
+                if (!vehicles.isEmpty()) {
+                    menu.getItem(vehicleManager.getCurrentVehicleIndex()).setChecked(true);
+                }
+            }
+        });
 
     }
 
+    private void refreshMaps() {
+        vehicleManager.setListener(new Listener() {
+            @Override
+            public void onEvent(String out) {
+                String[] s = out.split(",", 2);
+                latLng = new LatLng(Double.parseDouble(s[0]), Double.parseDouble(s[1]));
+                setUpMap(mMap);
+            }
+        });
+        vehicleManager.locationVehicle();
+    }
+
+    public void locationClick(View view) {
+        refreshMaps();
+    }
+
+    public void odometerClick(View view) {
+        refreshOdometer();
+    }
+
+
+
+    private void setOdometerView(int km) {
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                odometerView.setText(Integer.toString(km));
+            }
+        });
+    }
+}
+
+
     // load odometer
     private void refreshOdometer() {
-
+        vehicleManager.setListener(new Listener() {
+            @Override
+            public void onEvent(String out) {
+                double odometer = Double.parseDouble(out);
+                int km = (int) odometer;
+                setOdometerView(km);
+            }
+        });
+        vehicleManager.vehicleOdometer();
     }
 
     // load static vehicle data
@@ -125,6 +216,8 @@ public class MainActivity extends AppCompatActivity
             return true;
         }
 
+
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -137,11 +230,15 @@ public class MainActivity extends AppCompatActivity
             navigationView.getMenu().getItem(i).setChecked(false);
         }
 
+
         // id is
         int id = item.getItemId();
+        navigationView.getMenu().getItem(id).setChecked(true);
         vehicleManager.setCurrentVehicle(id);
 
-
+        vehicleLoad();
+        refreshOdometer();
+        refreshMaps();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
 

@@ -41,7 +41,7 @@ router.get('/info', function (req, res) {
     }
 })
 
-router.get('/location', function (req, res) {
+router.get('/location', async function (req, res) {
     var token = req.query.token
     var vehicleId = req.query.vehicleId
     if (!token || !vehicleId) {
@@ -49,7 +49,23 @@ router.get('/location', function (req, res) {
     }
     try {
         const vehicle = new smartcar.Vehicle(vehicleId, token);
-        res.send(vehicle.location())
+        let out = await vehicle.location()
+        res.send(out.data)
+    } catch (error) {
+        res.send(200)
+    }
+})
+
+router.get('/odometer', async function (req, res) {
+    var token = req.query.token
+    var vehicleId = req.query.vehicleId
+    if (!token || !vehicleId) {
+        return res.send(400, "Invalid arguments")
+    }
+    try {
+        const vehicle = new smartcar.Vehicle(vehicleId, token);
+        let out = await vehicle.odometer()
+        res.send(out.data)
     } catch (error) {
         res.send(200)
     }
@@ -64,6 +80,7 @@ router.get('/disconnect', function (req, res) {
     try {
         const vehicle = new smartcar.Vehicle(vehicleId, token);
         vehicle.disconnect()
+        res.send(200)
     } catch (error) {
         console.log(error)
         res.send(400)

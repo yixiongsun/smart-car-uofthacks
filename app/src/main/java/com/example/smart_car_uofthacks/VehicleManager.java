@@ -156,6 +156,7 @@ public class VehicleManager implements Serializable {
             }
             if (listener != null) {
                 listener.onEvent("");
+                listener = null;
             }
             saveAll();
         } catch (Exception e) {
@@ -210,10 +211,6 @@ public class VehicleManager implements Serializable {
         Requester.urlInfo(ParseInput.makeUrl(route, parameters));
 
         // request with this token
-
-
-
-
     }
 
     private void saveLocation(String location) {
@@ -223,7 +220,10 @@ public class VehicleManager implements Serializable {
             double longitude = jsonObject.getDouble("longitude");
             current.setLatitude(latitude);
             current.setLongitide(longitude);
-            intentManager.openMaps(latitude, longitude);
+            if (listener != null) {
+                listener.onEvent(latitude+","+longitude);
+                listener = null;
+            }
         } catch (Exception e) {
             Log.d("Error", e.toString());
         }
@@ -260,6 +260,39 @@ public class VehicleManager implements Serializable {
             Log.d("Error", e.toString());
         }
     }
+
+    public void vehicleOdometer() {
+        String id = current.getId();
+        String access = current.getAccess_token();
+        String route = "/vehicle/odometer";
+        Requester.setListener(new Listener() {
+            @Override
+            public void onEvent(String out) {
+                saveOdometer(out);
+            }
+        });
+        HashMap<String, String> parameters = new HashMap<String, String>();
+        parameters.put("token", access);
+        parameters.put("vehicleId", id);
+
+        Requester.urlInfo(ParseInput.makeUrl(route, parameters));
+    }
+
+    public void saveOdometer(String distance) {
+        try {
+            JSONObject jsonObject = new JSONObject(distance);
+            double odometer = jsonObject.getDouble("distance");
+            current.setOdometer(odometer);
+            if (listener != null) {
+                listener.onEvent(Double.toString(odometer));
+                listener = null;
+            }
+        } catch (Exception e) {
+            Log.d("Error", e.toString());
+        }
+    }
+
+
 
     public void disconnectVehicle() {
         String id = current.getId();

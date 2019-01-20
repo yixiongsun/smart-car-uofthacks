@@ -9,6 +9,15 @@ public class Vehicle implements Serializable {
     private String make;
     private String model;
     private int year;
+
+    public double getOdometer() {
+        return odometer;
+    }
+
+    public void setOdometer(double odometer) {
+        this.odometer = odometer;
+    }
+
     private double odometer;
     private double latitude;
     private double longitide;
