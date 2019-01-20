@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     VehicleManager vehicleManager;
+    NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,15 +32,6 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        /*
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -47,46 +39,51 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
 
 
         vehicleManager = new VehicleManager(this);
-        vehicleManager.addVehicle();
-        /*
-        vehicleManager.setListener(new Listener() {
-            @Override
-            public void onEvent(String out) {
-                openWebView(out);
-            }
-        });*/
+
+        if (!vehicleManager.hasVehicles()) {
+            vehicleManager.addVehicle();
+        } else {
+            menuSetup();
+            vehicleLoad();
+            refreshOdometer();
+        }
+
+
+    }
+
+    private void menuSetup() {
         // Array list of maps that contain data about the vehicle
         ArrayList<Vehicle> vehicles = vehicleManager.getVehicles();
-
-
-        // Demo ids
-        vehicles = new ArrayList<Vehicle>();
-        Vehicle a = new Vehicle("1", "asd", "qwe");
-        vehicles.add(a);
 
         // Get reference to menu and add objects from the list in the order of the list
         Menu menu = navigationView.getMenu();
         for (int i = 0; i < vehicles.size(); i++) {
             menu.add(0, i, 0, vehicles.get(i).getId());
         }
-
-        //openMaps();
-
+        menu.getItem(vehicleManager.getCurrentVehicleIndex()).setChecked(true);
 
     }
 
-    /*
-    private void openWebView(String out) {
-        Intent intent = new Intent(this, WebViewActivity.class);
-        intent.putExtra("exchange", out);
-        startActivityForResult(intent,1);
-    }*/
+    // load odometer
+    private void refreshOdometer() {
+
+    }
+
+    // load static vehicle data
+    private void vehicleLoad() {
+        Vehicle current = vehicleManager.getCurrentVehicle();
+        String name = current.getName();
+        String id = current.getId();
+        String vin = current.getVIN();
+
+        // SET UP LABELS!!!
+    }
 
 
     @Override
@@ -125,6 +122,10 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
+
+        for (int i = 0; i < navigationView.getMenu().size(); i++) {
+            navigationView.getMenu().getItem(i).setChecked(false);
+        }
 
         // id is
         int id = item.getItemId();

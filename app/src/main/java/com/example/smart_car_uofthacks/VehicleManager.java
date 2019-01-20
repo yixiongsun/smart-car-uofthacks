@@ -37,6 +37,15 @@ public class VehicleManager implements Serializable {
         intentManager = new IntentManager(context);
     }
 
+    public boolean hasVehicles() {
+        if (vehicles.isEmpty()) {
+            return false;
+        }
+
+        return true;
+    }
+
+
     public void setListener(Listener listener) {
         this.listener = listener;
     }
@@ -134,6 +143,9 @@ public class VehicleManager implements Serializable {
 
             }
             saveAll();
+            if (current == null) {
+                current = this.vehicles.get(0);
+            }
 
         } catch (Exception e) {
             Log.d("JSON Error", e.toString());
@@ -154,6 +166,15 @@ public class VehicleManager implements Serializable {
 
     public Vehicle getCurrentVehicle() {
         return current;
+    }
+
+    public int getCurrentVehicleIndex() {
+        for (int i = 0; i < this.vehicles.size(); i++) {
+            if (current.equals(vehicles)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
 

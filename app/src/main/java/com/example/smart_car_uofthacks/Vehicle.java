@@ -45,7 +45,55 @@ public class Vehicle implements Serializable {
     public void setLatitude(double l) { latitude = l;}
     public void setLongitide(double l) { longitide = l;}
 
+    public String getVIN() {
+        return VIN;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getMake() {
+        return make;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setVIN(String VIN) {
+        this.VIN = VIN;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setMake(String make) {
+        this.make = make;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
 
 
+    @Override
+    public boolean equals(Object b) {
+        if (b == this) return true;
+        if (!(b instanceof Vehicle)) return false;
+        if (this.id.equals(((Vehicle)b).getId())) {
+            return true;
+        }
+        return false;
+    }
 
 }
