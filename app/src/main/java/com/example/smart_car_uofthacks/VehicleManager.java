@@ -125,6 +125,8 @@ public class VehicleManager implements Serializable {
         // we get stuffs
         try {
             JSONArray vehicleIds = new JSONArray(vehicles);
+            Vehicle cVehicle = null;
+
             for (int i = 0; i < vehicleIds.length(); i++) {
                 JSONObject jsonObject = vehicleIds.getJSONObject(i);
                 String id = jsonObject.getString("id");
@@ -143,17 +145,26 @@ public class VehicleManager implements Serializable {
                         vehicle.setYear(year);
                         vehicle.setName();
                         found = true;
+                        if (cVehicle == null) {
+                            cVehicle = vehicle;
+                        }
                         break;
                     }
                 }
                 if (!found) {
-                    this.vehicles.add(new Vehicle(id, access, refresh, model, make, year));
+                    Vehicle nVehicle = new Vehicle(id, access, refresh, model, make, year);
+                    if (cVehicle == null) {
+                        cVehicle = nVehicle;
+                    }
+                    this.vehicles.add(nVehicle);
                 }
 
             }
-            if (current == null) {
-                current = this.vehicles.get(0);
+
+            if (cVehicle != null) {
+                current = cVehicle;
             }
+
             if (listener != null) {
                 listener.onEvent("");
                 listener = null;
