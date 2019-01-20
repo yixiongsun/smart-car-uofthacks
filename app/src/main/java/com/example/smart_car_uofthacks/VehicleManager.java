@@ -196,7 +196,7 @@ public class VehicleManager implements Serializable {
     public void locationVehicle() {
         String id = current.getId();
         String access = current.getAccess_token();
-        String route = "/vehicle/info";
+        String route = "/vehicle/location";
         Requester.setListener(new Listener() {
             @Override
             public void onEvent(String out) {
@@ -230,13 +230,94 @@ public class VehicleManager implements Serializable {
     }
 
 
-    public void aboutVehicle() {}
+    public void aboutVehicle() {
+        String id = current.getId();
+        String access = current.getAccess_token();
+        String route = "/vehicle/info";
+        Requester.setListener(new Listener() {
+            @Override
+            public void onEvent(String out) {
+                saveInfo(out);
+            }
+        });
+        HashMap<String, String> parameters = new HashMap<String, String>();
+        parameters.put("token", access);
+        parameters.put("vehicleId", id);
 
-    public void disconnectVehicle() {}
+        Requester.urlInfo(ParseInput.makeUrl(route, parameters));
+    }
 
-    public void unlockVehicle() {}
+    private void saveInfo(String info){
+        try{
+            JSONObject jsonObject = new JSONObject(info);
+            String make = jsonObject.getString("make");
+            String model = jsonObject.getString("make");
+            int year = jsonObject.getInt("year");
+            current.setMake(make);
+            current.setModel(model);
+            current.setYear(year);
+        } catch (Exception e) {
+            Log.d("Error", e.toString());
+        }
+    }
 
-    public void lockVehicle() {}
+    public void disconnectVehicle() {
+        String id = current.getId();
+        String access = current.getAccess_token();
+
+        String route = "vehicle/disconnect";
+
+        HashMap<String, String> parameters = new HashMap<String, String>();
+        parameters.put("token", access);
+        parameters.put("vehicleId", id);
+
+        Requester.setListener(new Listener() {
+            @Override
+            public void onEvent(String out) {
+
+            }
+        });
+
+        Requester.urlInfo(ParseInput.makeUrl(route, parameters));
+    }
+
+    public void unlockVehicle() {
+        String id = current.getId();
+        String access = current.getAccess_token();
+
+        String route = "vehicle/unlock";
+
+        HashMap<String, String> parameters = new HashMap<String, String>();
+        parameters.put("token", access);
+        parameters.put("vehicleId", id);
+
+        Requester.setListener(new Listener() {
+            @Override
+            public void onEvent(String out) {
+            }
+        });
+
+        Requester.urlInfo(ParseInput.makeUrl(route, parameters));
+    }
+
+    public void lockVehicle() {
+        String id = current.getId();
+        String access = current.getAccess_token();
+
+        String route = "vehicle/lock";
+
+        HashMap<String, String> parameters = new HashMap<String, String>();
+        parameters.put("token", access);
+        parameters.put("vehicleId", id);
+
+        Requester.setListener(new Listener() {
+            @Override
+            public void onEvent(String out) {
+            }
+        });
+
+        Requester.urlInfo(ParseInput.makeUrl(route, parameters));
+    }
 
     public void saveAll(){
         SavingData.saveToFile(SavingData.CURRENT_VEHICLE, this.context, current);
