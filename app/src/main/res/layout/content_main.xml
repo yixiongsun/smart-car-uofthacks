@@ -50,6 +50,7 @@
                 android:layout_weight="1.75"
                 android:layout_margin="10dp"
                 android:text="@string/odometer"
+                android:textColor="@color/white"
                 android:textSize="30sp"
                 android:padding="5dp"
                 android:textAlignment="center"
@@ -64,11 +65,14 @@
                 android:layout_marginRight="10dp"
                 android:layout_marginEnd="10dp"
                 android:padding="5dp"
+                android:tint="@color/white"
+                android:backgroundTint="@color/grey"
                 android:layout_weight="0.25"
                 android:adjustViewBounds="true"
                 android:background="@drawable/rounded_corners"
                 android:foreground="?attr/selectableItemBackground"
                 android:scaleType="fitCenter"
+                android:elevation="3dp"
                 android:src="@drawable/refresh_vector"
                 android:contentDescription="@string/unlock"/>
         </LinearLayout>
@@ -98,6 +102,7 @@
                 android:scaleType="fitCenter"
                 android:src="@drawable/open_lock_vector"
                 android:tint="@color/colorPrimary"
+                android:elevation="3dp"
                 android:contentDescription="@string/unlock"
                 android:onClick="unlockVehicle"/>
 
@@ -113,9 +118,11 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginBottom="20dp"
                 android:padding="10dp"
+                android:tint="@color/grey"
                 android:background="@drawable/rounded_corners"
                 android:foreground="?attr/selectableItemBackground"
                 android:adjustViewBounds="true"
+                android:elevation="5dp"
                 android:onClick="lockVehicle"
                 android:contentDescription="@string/lock"/>
         </LinearLayout>
@@ -131,6 +138,7 @@
             android:padding="10dp"
             android:background="@drawable/rounded_corners"
             android:foreground="?attr/selectableItemBackground"
+            android:elevation="3dp"
             android:adjustViewBounds="true"
             android:contentDescription="@string/lock"/>
 
