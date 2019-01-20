@@ -1,4 +1,5 @@
 #!/bin/bash
 git pull
-zip -r myAppFiles.zip
+rm -rf myAppFiles.zip
+zip -r myAppFiles.zip .
 az webapp deployment source config-zip --resource-group smart-car-uofthacks --name smart-car-uofthacks --src myAppFiles.zip
