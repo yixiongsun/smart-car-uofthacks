@@ -1,5 +1,6 @@
 package com.example.smart_car_uofthacks;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -16,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -283,10 +285,16 @@ public class MainActivity extends AppCompatActivity
 
     public void lockVehicle(View view) {
         vehicleManager.lockVehicle();
+        Context context = MainActivity.this;
+        String textToShow = "Vehicle Locked";
+        Toast.makeText(context, textToShow, Toast.LENGTH_SHORT).show();
     }
 
     public void unlockVehicle(View view) {
         vehicleManager.unlockVehicle();
+        Context context = MainActivity.this;
+        String textToShow = "Vehicle Unlocked";
+        Toast.makeText(context, textToShow, Toast.LENGTH_SHORT).show();
     }
 
     @Override
