@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -152,7 +153,7 @@ public class MainActivity extends AppCompatActivity
 
 
 
-    private void setOdometerView(int km) {
+    private void setOdometerView(final int km) {
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -160,7 +161,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
     }
-}
+
 
 
     // load odometer
