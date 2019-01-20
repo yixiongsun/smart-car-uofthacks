@@ -126,6 +126,7 @@ public class MainActivity extends AppCompatActivity
             this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    mMap.clear();
                     mMap.addMarker(new MarkerOptions().position(latLng).title(vehicleManager.getCurrentVehicle().getName()));
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
                     mMap.animateCamera( CameraUpdateFactory.zoomTo( 12.0f ) );                }
