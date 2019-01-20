@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "smart-car-ufothacks",
+  "private_key_id": "5ecdd9b6ef4d0292df24c69a92d11064ab92a016",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCpiVOYLOSeopQa\nPzcBrwYalUId0Bc50c5MuPBavHeCs5/VrEpEmgTLTdcGz+Mcr6h2xdGQvVDN1CiJ\nNbZu+Y0oolC0pdkmsEomdDx5mInIvv/2bVD4cDJahD6Piz4fnACT51rtUj2LpxUQ\nlKWZ8czAGAZ9PyzbwsgP7pUIRA2svEIh5Xbarn2IbO+6uK7XNsVC2Vqv0Xi3rJZw\ncANjBbdcbrWjrC0qQdQEFD9TnIEMzq0vv9wDIRv1gMWUrFWLtUeNrO2FyESMcI1H\naQxgFeGb0jDz+nw7L6AbUYlr0MpjZtthTyg4spHiQfpYC2Bf2XV9/oRroG3iT6f/\nUk6xHiQtAgMBAAECggEAHCEMpWxXb2mutI8mB4m8c8ctjehDnkSNG+Y4fPmVw7Id\ndDSuquS6JGhRI9B00ILlqvVGAOOkZ05K/n8SuqV9sg8CYIK+/aAU4X36NbulKtFk\nA0VegKYO+L1F6wexokl+QAwMJmG1k/kAMfzT4C/CJuIlm3zSqtDN5HTTtegis7TQ\nEd7yIhS2ljYVsjt39CROjRzuBtXO7rmCgiSVpzcgKjJ2rpo9v2oEmK+2FtT2iL7+\nBAcSHtRgA1/79rRaRQLT5i4X69rLg7TtueATEtmWSwTZH1U5QNv1k6uMbE3CqdP9\noVF6TlQWD1kuT7rPHn5LogV9jVUpT9cwfZ7A1tyJEQKBgQDqNZq6UbecjMkwTdvQ\nJ5OXMnYO/GCgmywOTdvNChb2xEmkZ8uWF7i+Yhok0y55ZzYtOIHXYW0ho3bD24Mu\nmh8ybpLnQjb8On5VjRMH4gHu0r3RQzWFKvPtabubs23D6dErjbEefc0QXIq7kqZr\nBTAnEeunkvbu8+IUCCp5xx5BXQKBgQC5T1ez4GCElyqHAMX1TWd+eg+P3P96iIS3\niQGV90IY3elIar9JSez+nVx3HlrGYAIPaxbQzF/tZro9vdad+V7sa+Sb6nPQ0m7e\nCi/C8GAGJaQlrSvDZwHoUkrsq5G6t7L5p+hHGWsFQ6YOGqJ2RibOC/33crjXqKQP\ncNxmrW0xEQKBgHEB6GSaZWPuMm1SRAvN7NL5kClu8RjNhpZoTvRCOA5da8MeKgeD\n7qo+H6tBEp2VhXiQWWYZJlUi0H10f3mO+BqXa96V/n35o1eYOGSHUrNvkBNWwI4+\nyW/2ooVgMEhlm33OYnX58WZBoNcczZu55yAS74fty6REnQNZZVVZFGopAoGAR9TV\nrkg/oaXnOkW2dov2njQ6bA3CioD40RwunS8nU/RRRVz7oTEiyN++w/3kOhllMwzT\n30QZuzCi6OP5mWrcvNBl4XpUQpIPn8pbETmUP02//0rNOAVp2+BqYqtu5e3nVpcb\nltPnhDbg236/kxFGYYCMharWs+IPFl0tUi/Pr8ECgYA09llMGYSHxv60lBOOnf0p\nT9xpVr9xE4WLCRx8LOYyFTOGKicX82jl16AjhcvWr58fh5lIhe41FWSrAV6FHDnX\n3xX0JU7CGoDte15gHkQjcjAR8vJEL9ImopC8U7AkAbzKpN7J5igBSBAqfGXVx1Wy\n95RIo+QXSwPiN3VxiunCRQ==\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-ouu88@smart-car-ufothacks.iam.gserviceaccount.com",
+  "client_id": "107150914041333992173",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-ouu88%40smart-car-ufothacks.iam.gserviceaccount.com"
+}

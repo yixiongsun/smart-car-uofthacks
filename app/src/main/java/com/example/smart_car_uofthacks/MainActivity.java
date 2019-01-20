@@ -2,6 +2,7 @@ package com.example.smart_car_uofthacks;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -32,10 +33,10 @@ public class MainActivity extends AppCompatActivity
 
     VehicleManager vehicleManager;
     NavigationView navigationView;
-    MapView mapView;
     GoogleMap mMap;
     LatLng latLng;
     TextView odometerView;
+    TextView nameView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,10 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        String androidId = Settings.Secure.getString(getContentResolver(),
+                Settings.Secure.ANDROID_ID);
+
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -57,15 +62,38 @@ public class MainActivity extends AppCompatActivity
 
 
         odometerView = (TextView) findViewById(R.id.tv_odometer);
+        nameView = (TextView) findViewById(R.id.tv_vehicle_info);
 
-        vehicleManager = new VehicleManager(this);
+        vehicleManager = new VehicleManager(this, androidId);
+        vehicleManager.setListener(new VehicleListener() {
+            @Override
+            public void onRefreshEvent() {
+                setNameView();
+                menuSetup();
+                refreshOdometer();
+                //vehicleLoad();
+                refreshMaps();
+            }
 
+            @Override
+            public void onLocationEvent(double lat, double lon) {
+                latLng = new LatLng(lat, lon);
+                setUpMap(mMap);
+            }
+
+            @Override
+            public void onOdometerEvent(double odometer) {
+                int km = (int) odometer;
+                setOdometerView(km);
+            }
+        });
 
         if (!vehicleManager.hasVehicles()) {
             addVehicle();
         } else {
+            setNameView();
             menuSetup();
-            vehicleLoad();
+            //vehicleLoad();
             refreshOdometer();
             refreshMaps();
         }
@@ -83,15 +111,6 @@ public class MainActivity extends AppCompatActivity
 
 
     private void addVehicle() {
-        vehicleManager.setListener(new Listener() {
-            @Override
-            public void onEvent(String out) {
-                menuSetup();
-                refreshOdometer();
-                vehicleLoad();
-                refreshMaps();
-            }
-        });
         vehicleManager.addVehicle();
     }
 
@@ -140,14 +159,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void refreshMaps() {
-        vehicleManager.setListener(new Listener() {
-            @Override
-            public void onEvent(String out) {
-                String[] s = out.split(",", 2);
-                latLng = new LatLng(Double.parseDouble(s[0]), Double.parseDouble(s[1]));
-                setUpMap(mMap);
-            }
-        });
         vehicleManager.locationVehicle();
     }
 
@@ -165,23 +176,25 @@ public class MainActivity extends AppCompatActivity
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                odometerView.setText(Integer.toString(km));
+                odometerView.setText(Integer.toString(km) + " KM");
             }
         });
     }
 
 
+    private void setNameView() {
+        final String name = vehicleManager.getCurrentVehicle().getName();
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                nameView.setText(name);
+            }
+        });
+    }
+
 
     // load odometer
     private void refreshOdometer() {
-        vehicleManager.setListener(new Listener() {
-            @Override
-            public void onEvent(String out) {
-                double odometer = Double.parseDouble(out);
-                int km = (int) odometer;
-                setOdometerView(km);
-            }
-        });
         vehicleManager.vehicleOdometer();
     }
 
@@ -222,6 +235,9 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+
+            // disconnect
+            vehicleManager.disconnectVehicle();
             return true;
         }
 
@@ -249,8 +265,9 @@ public class MainActivity extends AppCompatActivity
         }
         navigationView.getMenu().getItem(id).setChecked(true);
         vehicleManager.setCurrentVehicle(id);
+        setNameView();
 
-        vehicleLoad();
+        //vehicleLoad();
         refreshOdometer();
         refreshMaps();
 

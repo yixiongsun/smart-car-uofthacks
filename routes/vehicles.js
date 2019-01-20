@@ -1,9 +1,11 @@
 var express = require('express')
 var router = express.Router()
 var smartcar = require('smartcar')
+var firebase = require('../libraries/firebase')
 
 router.get('/vehicles', function (req, res) {
     var token = req.query.token
+    var appId = req.query.appId
     if (!token) {
         return res.send(400, "Invalid arguments")
     }
@@ -18,10 +20,22 @@ router.get('/vehicles', function (req, res) {
                     let v = await vehicle.info()
                     vehicles.push(v)
                 }
+
+                /*
+                var data = {}
+                for (var i = 0; i < vehicles.length; i++) {
+                    data[vehicles[i].id] = {
+                        make: vehicles[i].make,
+                        model: vehicles[i].model,
+                        year: vehicles[i].year
+                    }
+                }
+                firebase.addData(appId, data)*/
+
                 res.send(vehicles)
             } catch (error) {
                 console.log(error)
-                return res.send(error)
+                return res.send(error.statusCode)
             }
         })
 })
@@ -52,7 +66,7 @@ router.get('/location', async function (req, res) {
         let out = await vehicle.location()
         res.send(out.data)
     } catch (error) {
-        res.send(200)
+        res.send(error.statusCode)
     }
 })
 
@@ -67,7 +81,7 @@ router.get('/odometer', async function (req, res) {
         let out = await vehicle.odometer()
         res.send(out.data)
     } catch (error) {
-        res.send(200)
+        res.send(error.statusCode)
     }
 })
 
@@ -99,7 +113,7 @@ router.get('/unlock', function (req, res) {
         res.send(200)
     } catch (error) {
         console.log(error)
-        res.send(400)
+        res.send(error.statusCode)
     }
 })
 
@@ -115,7 +129,7 @@ router.get('/lock', function (req, res) {
         res.send(200)
     } catch (error) {
         console.log(error)
-        res.send(400)
+        res.send(error.statusCode)
     }
 })
 

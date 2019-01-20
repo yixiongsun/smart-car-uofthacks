@@ -23,30 +23,29 @@ router.get('/', function (req, res) {
     }
 })
 
-router.get('/exchange', function (req, res) {
+router.get('/exchange', async function (req, res) {
     // TODO: Authorization Step 1b: Launch Smartcar authentication dialog
     // TODO: Authorization Step 3: Handle Smartcar response
     const code = req.query.code;
-    return client.exchangeCode(code)
-    .then(function (_access) {
-        // in a production app you'll want to store this in some kind of persistent storage
-        access = _access;
-        
+
+    try {
+        let access = await client.exchangeCode(code)
         res.send(access);
-        
-    })
+    } catch (error) {
+        console.log(error)
+        res.send(400)
+    }
 })
 
-router.get('/refresh', function(req, res) {
+router.get('/refresh', async function(req, res) {
     const token = req.query.token
-
-    return client.exchangeRefreshToken(token)
-        .then(function (_access) {
-            // in a production app you'll want to store this in some kind of persistent storage
-            access = _access;
-
-            res.send(access);
-        })
+    try {
+        let access = await client.exchangeRefreshToken(token)
+        res.send(access)
+    } catch (error) {
+        console.log(error)
+        res.send(400)
+    }
 })
 
 module.exports = router

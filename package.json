@@ -10,6 +10,9 @@
   },
   "dependencies": {
     "express": "^4.16.4",
+    "firebase": "^5.8.0",
+    "firebase-admin": "^6.5.0",
+    "grpc": "^1.18.0",
     "smartcar": "^4.2.1"
   },
   "main": "app.js",

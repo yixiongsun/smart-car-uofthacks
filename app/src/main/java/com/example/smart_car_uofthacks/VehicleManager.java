@@ -14,6 +14,13 @@ import java.util.HashMap;
 
 import android.content.Context;
 
+interface VehicleListener {
+    void onRefreshEvent();
+    void onLocationEvent(double lat, double lon);
+    void onOdometerEvent(double odometer);
+}
+
+
 public class VehicleManager implements Serializable {
 
     // improvements -> create a vehicle class
@@ -21,13 +28,16 @@ public class VehicleManager implements Serializable {
     private Vehicle current;
     Context context;
     IntentManager intentManager;
-    Listener listener;
+    VehicleListener listener;
+    private String rAccess;
+    private String rRefresh;
+    private final String androidId;
 
     // Constructor for the Vehicle manager class
     // Initializes vehicles array and loads the data from storage
-    public VehicleManager(Context context) {
+    public VehicleManager(Context context, String androidId) {
         this.context = context;
-
+        this.androidId = androidId;
         loadAll();
         if (vehicles == null) {
             vehicles = new ArrayList<Vehicle>();
@@ -35,7 +45,73 @@ public class VehicleManager implements Serializable {
         }
 
         intentManager = new IntentManager(context);
+        Requester.setListener(new Listener() {
+            @Override
+            public void onRefreshEvent(String tokens) {
+                // refresh token
+                if (tokens == null) {
+                    refreshToken();
+                } else {
+                    try {
+                        JSONObject jsonObject = new JSONObject(tokens);
+                        rAccess = jsonObject.getString("accessToken");
+                        rRefresh = jsonObject.getString("refreshToken");
+                        updateTokens();
+                    } catch (Exception e) {
+                        Log.d("JSON Error", e.toString());
+
+                    }
+                }
+            }
+
+            @Override
+            public void onAuthEvent(String out) {
+                intentManager.openWebView(out);
+            }
+
+            @Override
+            public void onExchangeEvent(String out) {
+                try {
+                    JSONObject jsonObject = new JSONObject(out);
+                    addVehicle(jsonObject);
+                } catch (Exception e) {
+                    Log.d("JSON Error", e.toString());
+                }
+            }
+
+            @Override
+            public void onVehicleEvent(String out) {
+                saveNewVehicles(out, rAccess, rRefresh);
+            }
+
+            @Override
+            public void onOdometerEvent(String out) {
+                saveOdometer(out);
+            }
+
+            @Override
+            public void onLocationEvent(String out) {
+                saveLocation(out);
+            }
+        });
     }
+
+    private void updateTokens() {
+        if (rRefresh == null) return;
+        for (Vehicle v: vehicles) {
+            if (v.getRefresh_token().equals(rRefresh)) {
+                v.setAccess_token(rAccess);
+            }
+        }
+        rAccess = null;
+        rRefresh = null;
+    }
+
+
+    private void refreshToken() {
+        Requester.urlInfo(ParseInput.makeUrl("/login", new HashMap<String, String>()), Req.REFRESH);
+    }
+
 
     public boolean hasVehicles() {
         if (vehicles.isEmpty()) {
@@ -46,7 +122,7 @@ public class VehicleManager implements Serializable {
     }
 
 
-    public void setListener(Listener listener) {
+    public void setListener(VehicleListener listener) {
         this.listener = listener;
     }
 
@@ -69,51 +145,22 @@ public class VehicleManager implements Serializable {
     }
 
     private void openAuthLink() {
-        Requester.setListener(new Listener() {
-            @Override
-            public void onEvent(String out) {
-                /*
-                if (listener != null) {
-                    listener.onEvent(out);
-                }*/
-                intentManager.openWebView(out);
-            }
-        });
-        Requester.urlInfo(ParseInput.makeUrl("/login", new HashMap<String, String>()));
+        Requester.urlInfo(ParseInput.makeUrl("/login", new HashMap<String, String>()), Req.AUTH);
     }
 
     public void exchangeAuth(String url) {
-        Requester.setListener(new Listener() {
-            @Override
-            public void onEvent(String out) {
-                // we get stuffs
-                try {
-                    JSONObject jsonObject = new JSONObject(out);
-                    addVehicle(jsonObject);
-                } catch (Exception e) {
-                    Log.d("JSON Error", e.toString());
-                }
-
-            }
-        });
-        Requester.urlInfo(url);
+        Requester.urlInfo(url, Req.EXCHANGE);
     }
 
     private void addVehicle(JSONObject jsonObject) {
         try {
-            final String access = jsonObject.getString("accessToken");
-            final String refresh = jsonObject.getString("refreshToken");
+            rAccess = jsonObject.getString("accessToken");
+            rRefresh = jsonObject.getString("refreshToken");
             String route = "/vehicle/vehicles";
-            Requester.setListener(new Listener() {
-                @Override
-                public void onEvent(String out) {
-                    saveNewVehicles(out, access, refresh);
-
-                }
-            });
             HashMap<String, String> parameters = new HashMap<String, String>();
-            parameters.put("token", access);
-            Requester.urlInfo(ParseInput.makeUrl(route, parameters));
+            parameters.put("token", rAccess);
+            parameters.put("appId", androidId);
+            Requester.urlInfo(ParseInput.makeUrl(route, parameters), Req.VEHICLE);
         } catch (Exception  e){
             Log.d("Error", e.toString());
         }
@@ -166,10 +213,11 @@ public class VehicleManager implements Serializable {
             }
 
             if (listener != null) {
-                listener.onEvent("");
-                listener = null;
+                listener.onRefreshEvent();
             }
             saveAll();
+            rAccess = null;
+            rRefresh = null;
         } catch (Exception e) {
             Log.d("JSON Error", e.toString());
         }
@@ -209,17 +257,12 @@ public class VehicleManager implements Serializable {
         String id = current.getId();
         String access = current.getAccess_token();
         String route = "/vehicle/location";
-        Requester.setListener(new Listener() {
-            @Override
-            public void onEvent(String out) {
-                saveLocation(out);
-            }
-        });
         HashMap<String, String> parameters = new HashMap<String, String>();
         parameters.put("token", access);
         parameters.put("vehicleId", id);
+        parameters.put("appId", androidId);
 
-        Requester.urlInfo(ParseInput.makeUrl(route, parameters));
+        Requester.urlInfo(ParseInput.makeUrl(route, parameters), Req.LOCATION);
 
         // request with this token
     }
@@ -232,15 +275,16 @@ public class VehicleManager implements Serializable {
             current.setLatitude(latitude);
             current.setLongitide(longitude);
             if (listener != null) {
-                listener.onEvent(latitude+","+longitude);
-                listener = null;
+                listener.onLocationEvent(latitude, longitude);
             }
+            saveAll();
         } catch (Exception e) {
             Log.d("Error", e.toString());
         }
     }
 
 
+    /*
     public void aboutVehicle() {
         String id = current.getId();
         String access = current.getAccess_token();
@@ -255,7 +299,7 @@ public class VehicleManager implements Serializable {
         parameters.put("token", access);
         parameters.put("vehicleId", id);
 
-        Requester.urlInfo(ParseInput.makeUrl(route, parameters));
+        Requester.urlInfo(ParseInput.makeUrl(route, parameters),);
     }
 
     private void saveInfo(String info){
@@ -270,23 +314,19 @@ public class VehicleManager implements Serializable {
         } catch (Exception e) {
             Log.d("Error", e.toString());
         }
-    }
+    }*/
 
     public void vehicleOdometer() {
         String id = current.getId();
         String access = current.getAccess_token();
         String route = "/vehicle/odometer";
-        Requester.setListener(new Listener() {
-            @Override
-            public void onEvent(String out) {
-                saveOdometer(out);
-            }
-        });
+
         HashMap<String, String> parameters = new HashMap<String, String>();
         parameters.put("token", access);
         parameters.put("vehicleId", id);
+        parameters.put("appId", androidId);
 
-        Requester.urlInfo(ParseInput.makeUrl(route, parameters));
+        Requester.urlInfo(ParseInput.makeUrl(route, parameters), Req.ODOMETER);
     }
 
     public void saveOdometer(String distance) {
@@ -295,9 +335,9 @@ public class VehicleManager implements Serializable {
             double odometer = jsonObject.getDouble("distance");
             current.setOdometer(odometer);
             if (listener != null) {
-                listener.onEvent(Double.toString(odometer));
-                listener = null;
+                listener.onOdometerEvent(odometer);
             }
+            saveAll();
         } catch (Exception e) {
             Log.d("Error", e.toString());
         }
@@ -315,14 +355,22 @@ public class VehicleManager implements Serializable {
         parameters.put("token", access);
         parameters.put("vehicleId", id);
 
-        Requester.setListener(new Listener() {
-            @Override
-            public void onEvent(String out) {
+        Requester.urlInfo(ParseInput.makeUrl(route, parameters), Req.DISCONNECT);
 
+        vehicles.remove(getCurrentVehicleIndex());
+
+        if (vehicles.isEmpty()) {
+            current = null;
+            addVehicle();
+        } else {
+            current = vehicles.get(0);
+            if (listener != null) {
+                listener.onRefreshEvent();
             }
-        });
+        }
+        saveAll();
 
-        Requester.urlInfo(ParseInput.makeUrl(route, parameters));
+
     }
 
     public void unlockVehicle() {
@@ -334,14 +382,7 @@ public class VehicleManager implements Serializable {
         HashMap<String, String> parameters = new HashMap<String, String>();
         parameters.put("token", access);
         parameters.put("vehicleId", id);
-
-        Requester.setListener(new Listener() {
-            @Override
-            public void onEvent(String out) {
-            }
-        });
-
-        Requester.urlInfo(ParseInput.makeUrl(route, parameters));
+        Requester.urlInfo(ParseInput.makeUrl(route, parameters), Req.UNLOCK);
     }
 
     public void lockVehicle() {
@@ -353,14 +394,7 @@ public class VehicleManager implements Serializable {
         HashMap<String, String> parameters = new HashMap<String, String>();
         parameters.put("token", access);
         parameters.put("vehicleId", id);
-
-        Requester.setListener(new Listener() {
-            @Override
-            public void onEvent(String out) {
-            }
-        });
-
-        Requester.urlInfo(ParseInput.makeUrl(route, parameters));
+        Requester.urlInfo(ParseInput.makeUrl(route, parameters), Req.LOCK);
     }
 
     public void saveAll(){
