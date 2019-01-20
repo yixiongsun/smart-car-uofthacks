@@ -6,7 +6,7 @@ var smartcar = require('smartcar')
 const client = new smartcar.AuthClient({
     clientId: "9bc9e1a5-e91a-4fc1-beda-858090985de4",
     clientSecret: "174828ce-3a3b-4854-8e25-e28d397795c9",
-    redirectUri: "http://localhost:3000/login/exchange",
+    redirectUri: "http://smartcarconnect.net/login/exchange",
     scope: ['read_vehicle_info', 'read_location', 'read_odometer', 'control_security', 'control_security:unlock', 'control_security:lock', 'read_vin'],
     testMode: true,
 });

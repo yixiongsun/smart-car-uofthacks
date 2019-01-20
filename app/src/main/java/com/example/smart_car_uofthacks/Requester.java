@@ -33,7 +33,7 @@ public class Requester{
             @Override
             public void run() {
                 try {
-                    answer = running(nUrl);
+                    answer = running(url);
                     //ReturnAnswer(answer);
                     if (event != null) {
                         event.onEvent(answer);

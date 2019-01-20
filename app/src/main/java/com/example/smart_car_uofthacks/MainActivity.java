@@ -59,18 +59,10 @@ public class MainActivity extends AppCompatActivity
         odometerView = (TextView) findViewById(R.id.tv_odometer);
 
         vehicleManager = new VehicleManager(this);
-        vehicleManager.setListener(new Listener() {
-            @Override
-            public void onEvent(String out) {
-                menuSetup();
-                refreshOdometer();
-                vehicleLoad();
-                refreshMaps();
-            }
-        });
+
 
         if (!vehicleManager.hasVehicles()) {
-            vehicleManager.addVehicle();
+            addVehicle();
         } else {
             menuSetup();
             vehicleLoad();
@@ -88,6 +80,21 @@ public class MainActivity extends AppCompatActivity
         });
 
     }
+
+
+    private void addVehicle() {
+        vehicleManager.setListener(new Listener() {
+            @Override
+            public void onEvent(String out) {
+                menuSetup();
+                refreshOdometer();
+                vehicleLoad();
+                refreshMaps();
+            }
+        });
+        vehicleManager.addVehicle();
+    }
+
 
     private void setUpMap(GoogleMap googleMap) {
         if (googleMap == null) {
@@ -123,6 +130,7 @@ public class MainActivity extends AppCompatActivity
                 for (int i = 0; i < vehicles.size(); i++) {
                     menu.add(0, i, 0, vehicles.get(i).getName());
                 }
+                menu.add(0, -1, 0, "Add new Car");
                 if (!vehicles.isEmpty()) {
                     menu.getItem(vehicleManager.getCurrentVehicleIndex()).setChecked(true);
                 }
@@ -231,17 +239,21 @@ public class MainActivity extends AppCompatActivity
             navigationView.getMenu().getItem(i).setChecked(false);
         }
 
-
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
         // id is
         int id = item.getItemId();
+        if (id == -1) {
+            addVehicle();
+            return true;
+        }
         navigationView.getMenu().getItem(id).setChecked(true);
         vehicleManager.setCurrentVehicle(id);
 
         vehicleLoad();
         refreshOdometer();
         refreshMaps();
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+
 
         return true;
     }
