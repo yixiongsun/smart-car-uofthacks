@@ -8,7 +8,7 @@ const client = new smartcar.AuthClient({
     clientSecret: "174828ce-3a3b-4854-8e25-e28d397795c9",
     redirectUri: "https://smartcarconnect.net/login/exchange",
     scope: ['read_vehicle_info', 'read_location', 'read_odometer', 'control_security', 'control_security:unlock', 'control_security:lock', 'read_vin'],
-    testMode: true,
+    testMode: process.env.testMode | false,
 });
 
 router.get('/', function (req, res) {

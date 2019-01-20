@@ -349,7 +349,7 @@ public class VehicleManager implements Serializable {
         String id = current.getId();
         String access = current.getAccess_token();
 
-        String route = "vehicle/disconnect";
+        String route = "/vehicle/disconnect";
 
         HashMap<String, String> parameters = new HashMap<String, String>();
         parameters.put("token", access);
@@ -377,7 +377,7 @@ public class VehicleManager implements Serializable {
         String id = current.getId();
         String access = current.getAccess_token();
 
-        String route = "vehicle/unlock";
+        String route = "/vehicle/unlock";
 
         HashMap<String, String> parameters = new HashMap<String, String>();
         parameters.put("token", access);
@@ -389,7 +389,7 @@ public class VehicleManager implements Serializable {
         String id = current.getId();
         String access = current.getAccess_token();
 
-        String route = "vehicle/lock";
+        String route = "/vehicle/lock";
 
         HashMap<String, String> parameters = new HashMap<String, String>();
         parameters.put("token", access);
