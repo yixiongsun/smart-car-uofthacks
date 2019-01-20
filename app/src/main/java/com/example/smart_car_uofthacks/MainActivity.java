@@ -45,6 +45,14 @@ public class MainActivity extends AppCompatActivity
 
 
         vehicleManager = new VehicleManager(this);
+        vehicleManager.setListener(new Listener() {
+            @Override
+            public void onEvent(String out) {
+                menuSetup();
+                refreshOdometer();
+                vehicleLoad();
+            }
+        });
 
         if (!vehicleManager.hasVehicles()) {
             vehicleManager.addVehicle();
@@ -64,9 +72,11 @@ public class MainActivity extends AppCompatActivity
         // Get reference to menu and add objects from the list in the order of the list
         Menu menu = navigationView.getMenu();
         for (int i = 0; i < vehicles.size(); i++) {
-            menu.add(0, i, 0, vehicles.get(i).getId());
+            menu.add(0, i, 0, vehicles.get(i).getName());
         }
-        menu.getItem(vehicleManager.getCurrentVehicleIndex()).setChecked(true);
+        if (!vehicles.isEmpty()) {
+            menu.getItem(vehicleManager.getCurrentVehicleIndex()).setChecked(true);
+        }
 
     }
 

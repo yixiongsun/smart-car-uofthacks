@@ -126,27 +126,38 @@ public class VehicleManager implements Serializable {
         try {
             JSONArray vehicleIds = new JSONArray(vehicles);
             for (int i = 0; i < vehicleIds.length(); i++) {
-                String id = vehicleIds.getString(i);
+                JSONObject jsonObject = vehicleIds.getJSONObject(i);
+                String id = jsonObject.getString("id");
+                String make = jsonObject.getString("make");
+                String model = jsonObject.getString("model");
+                int year = jsonObject.getInt("year");
                 boolean found = false;
                 for (Vehicle vehicle: this.vehicles ) {
+
                     // if vehicle already exists, update the values
                     if (vehicle.getId().equals(id)) {
                         vehicle.setAccess_token(access);
                         vehicle.setRefresh_token(refresh);
+                        vehicle.setMake(make);
+                        vehicle.setModel(model);
+                        vehicle.setYear(year);
+                        vehicle.setName();
                         found = true;
                         break;
                     }
                 }
                 if (!found) {
-                    this.vehicles.add(new Vehicle(id, access, refresh));
+                    this.vehicles.add(new Vehicle(id, access, refresh, model, make, year));
                 }
 
             }
-            saveAll();
             if (current == null) {
                 current = this.vehicles.get(0);
             }
-
+            if (listener != null) {
+                listener.onEvent("");
+            }
+            saveAll();
         } catch (Exception e) {
             Log.d("JSON Error", e.toString());
         }
@@ -155,11 +166,12 @@ public class VehicleManager implements Serializable {
 
 
 
-    //
+    // index based
     public void setCurrentVehicle(int index) {
         current = vehicles.get(index);
     }
 
+    // vehicle based
     public void setCurrentVehicle(Vehicle vehicle) {
         current = vehicle;
     }
@@ -169,12 +181,15 @@ public class VehicleManager implements Serializable {
     }
 
     public int getCurrentVehicleIndex() {
+        if (current == null) {
+            current = vehicles.get(0);
+        }
         for (int i = 0; i < this.vehicles.size(); i++) {
-            if (current.equals(vehicles)) {
+            if (current.equals(vehicles.get(i))) {
                 return i;
             }
         }
-        return -1;
+        return 0;
     }
 
 

@@ -15,10 +15,14 @@ public class Vehicle implements Serializable {
     private String access_token;
     private String refresh_token;
 
-    public Vehicle(String id, String access, String refresh) {
+    public Vehicle(String id, String access, String refresh, String model, String make, int year) {
         this.access_token = access;
         this.id = id;
         this.refresh_token = refresh;
+        this.model = model;
+        this.make = make;
+        this.year = year;
+        this.setName();
     }
 
     // setters + getters
@@ -45,6 +49,14 @@ public class Vehicle implements Serializable {
     public void setLatitude(double l) { latitude = l;}
     public void setLongitide(double l) { longitide = l;}
 
+    public void setName() {
+        if (make == null || model == null || year == 0) {
+            return;
+        }
+        name = year + " " + make + " " + model;
+    }
+
+
     public String getVIN() {
         return VIN;
     }
@@ -69,9 +81,6 @@ public class Vehicle implements Serializable {
         this.VIN = VIN;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public void setMake(String make) {
         this.make = make;

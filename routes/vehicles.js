@@ -8,9 +8,21 @@ router.get('/vehicles', function (req, res) {
         return res.send(400, "Invalid arguments")
     }
     return smartcar.getVehicleIds(token)
-        .then(function (data) {
+        .then(async function (data) {
             // the list of vehicle ids
-            res.send(data.vehicles)
+            try {
+                var vehicles = []
+                for (var i = 0; i < data.vehicles.length; i++) {
+
+                    const vehicle = new smartcar.Vehicle(data.vehicles[i], token)
+                    let v = await vehicle.info()
+                    vehicles.push(v)
+                }
+                res.send(vehicles)
+            } catch (error) {
+                console.log(error)
+                return res.send(error)
+            }
         })
 })
 
