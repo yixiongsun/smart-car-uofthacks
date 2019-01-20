@@ -138,13 +138,18 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    public void disconnectVehicle(View view){
 
-
-    public void lockVehicle() {
-        //vehicleManager.lockVehicle();
+        vehicleManager.disconnectVehicle();
     }
 
-    public void unlockVehicle() {}
+    public void lockVehicle(View view) {
+        vehicleManager.lockVehicle();
+    }
+
+    public void unlockVehicle(View view) {
+        vehicleManager.unlockVehicle();
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
