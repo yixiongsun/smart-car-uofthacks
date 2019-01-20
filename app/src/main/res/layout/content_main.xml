@@ -19,128 +19,153 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp">
 
         <TextView
             android:id="@+id/tv_vehicle_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginBottom="30dp"
-            android:text="2019 Tesla Model S"
-            android:textSize="35sp"
-            android:textStyle="bold"
+            android:layout_marginBottom="0dp"
             android:padding="5dp"
-            android:textAlignment="center"/>
+            android:text="2019 Tesla Model S"
+            android:textAlignment="center"
+            android:textSize="35sp"
+            android:textStyle="bold" />
 
         <LinearLayout
+            android:id="@+id/odometer_linear_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:weightSum="2"
-            android:id="@+id/odometer_linear_layout"
-            android:layout_below="@+id/tv_vehicle_info">
+            android:layout_below="@+id/tv_vehicle_info"
+            android:weightSum="2">
 
 
             <TextView
                 android:id="@+id/tv_odometer"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1.75"
                 android:layout_margin="10dp"
-                android:text="@string/odometer"
-                android:textColor="@color/white"
-                android:textSize="30sp"
+                android:layout_weight="1.75"
+                android:background="@drawable/rounded_corners"
                 android:padding="5dp"
+                android:text="@string/odometer"
                 android:textAlignment="center"
-                android:background="@drawable/rounded_corners"/>
+                android:textColor="@color/white"
+                android:textSize="30sp" />
 
             <ImageButton
                 android:id="@+id/odometer_refresh_button"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginRight="10dp"
                 android:layout_marginEnd="10dp"
-                android:padding="5dp"
-                android:tint="@color/white"
-                android:backgroundTint="@color/grey"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
                 android:layout_weight="0.25"
                 android:adjustViewBounds="true"
                 android:background="@drawable/rounded_corners"
-                android:foreground="?attr/selectableItemBackground"
-                android:scaleType="fitCenter"
+                android:backgroundTint="@color/grey"
+                android:contentDescription="@string/unlock"
                 android:elevation="3dp"
+                android:foreground="?attr/selectableItemBackground"
+                android:padding="5dp"
+                android:scaleType="fitCenter"
                 android:src="@drawable/refresh_vector"
-                android:contentDescription="@string/unlock"/>
+                android:tint="@color/white" />
         </LinearLayout>
 
 
-
         <LinearLayout
+            android:id="@+id/lock_unlock_linear_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:weightSum="2"
-            android:id="@+id/lock_unlock_linear_layout"
-            android:layout_alignParentBottom="true">
+            android:layout_alignParentBottom="true"
+            android:weightSum="2">
 
             <ImageButton
                 android:id="@+id/unlock_button"
                 android:layout_width="0dp"
                 android:layout_height="75dp"
+                android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginLeft="10dp"
                 android:layout_marginBottom="20dp"
-                android:padding="10dp"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
                 android:background="@drawable/rounded_corners"
+                android:contentDescription="@string/unlock"
+                android:elevation="3dp"
                 android:foreground="?attr/selectableItemBackground"
+                android:onClick="unlockVehicle"
+                android:padding="10dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/open_lock_vector"
-                android:tint="@color/colorPrimary"
-                android:elevation="3dp"
-                android:contentDescription="@string/unlock"
-                android:onClick="unlockVehicle"/>
+                android:tint="@color/colorPrimary" />
 
             <ImageButton
                 android:id="@+id/lock_button"
                 android:layout_width="0dp"
                 android:layout_height="75dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/lock_closed_vector"
-                android:layout_weight="1"
+                android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginLeft="10dp"
                 android:layout_marginBottom="20dp"
-                android:padding="10dp"
-                android:tint="@color/grey"
-                android:background="@drawable/rounded_corners"
-                android:foreground="?attr/selectableItemBackground"
+                android:layout_weight="1"
                 android:adjustViewBounds="true"
+                android:background="@drawable/rounded_corners"
+                android:contentDescription="@string/lock"
                 android:elevation="5dp"
+                android:foreground="?attr/selectableItemBackground"
                 android:onClick="lockVehicle"
-                android:contentDescription="@string/lock"/>
+                android:padding="10dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/lock_closed_vector"
+                android:tint="@color/grey" />
+        </LinearLayout>
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:map="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            android:layout_above="@id/location_button"
+            android:layout_below="@+id/odometer_linear_layout"
+            android:layout_margin="10dp"
+            android:orientation="vertical">
+
+            <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/map"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                map:cameraTargetLat="35.25215"
+                map:cameraTargetLng="-112.24659"
+                map:uiTiltGestures="true"
+                map:uiZoomControls="true"
+                map:uiZoomGestures="true"
+                tools:context="org.test.MapActivity" />
+
         </LinearLayout>
 
         <ImageButton
             android:id="@+id/location_button"
             android:layout_width="match_parent"
             android:layout_height="75dp"
-            android:scaleType="fitCenter"
             android:layout_above="@+id/lock_unlock_linear_layout"
-            android:src="@drawable/location_symbol_vector"
             android:layout_margin="10dp"
-            android:padding="10dp"
-            android:background="@drawable/rounded_corners"
-            android:foreground="?attr/selectableItemBackground"
-            android:elevation="3dp"
             android:adjustViewBounds="true"
-            android:contentDescription="@string/lock"/>
+            android:background="@drawable/rounded_corners"
+            android:contentDescription="@string/lock"
+            android:elevation="3dp"
+            android:foreground="?attr/selectableItemBackground"
+            android:padding="10dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/location_symbol_vector" />
 
     </RelativeLayout>
 
